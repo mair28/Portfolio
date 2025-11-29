@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Sora, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -41,6 +42,10 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${spaceGrotesk.variable} ${sora.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         {children}
+        <Script
+          src="//code.tidio.co/vvkpxk5rrkkisvf4o59b6oapxc8zq8fg.js"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );
