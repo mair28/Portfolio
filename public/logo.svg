@@ -1,0 +1,6 @@
+<svg width="100" height="50" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- O letter - circular ring -->
+  <circle cx="22" cy="25" r="16" stroke="#334155" stroke-width="9" fill="none"/>
+  <!-- M letter -->
+  <path d="M38 45V5H50L62 28L74 5H86V45H76V18L64 40H60L48 18V45H38Z" fill="#334155"/>
+</svg>
