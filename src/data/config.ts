@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Omair Malic",
-  title: "Freelance Python Expert & Fullstack Web Developer",
+  title: "Python Automation & Web Scraper | FastAPI Developer",
   tagline: "Building powerful automation tools and modern web applications",
   email: "omairmalic28@gmail.com",
   location: "Philippines",
