@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, MapPin, Heart } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 import { siteConfig } from "@/data/config";
 import Image from "next/image";
 
@@ -33,10 +33,6 @@ export default function Footer() {
               {siteConfig.location}
             </span>
           </div>
-
-          <p className="flex items-center gap-1 text-sm">
-            Built with <Heart size={14} className="text-red-500" /> using Next.js & Tailwind CSS
-          </p>
 
           <p className="text-sm">
             &copy; {currentYear} {siteConfig.name}. All rights reserved.
