@@ -110,7 +110,7 @@ export const projects: Project[] = [
     description: "Real-time crypto token monitoring tool for Axiom Trade platform with Discord webhook notifications and live dashboard for tracking new token launches.",
     duration: "Nov 2025",
     technologies: ["Python", "FastAPI", "React", "Vite", "Discord Webhooks", "REST API"],
-    featured: true,
+    featured: false,
     codeSnippet: {
       language: "python",
       explanation: "Real-time token search with Discord notifications for new Solana token launches on Axiom Trade.",
