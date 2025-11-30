@@ -65,7 +65,7 @@ export default function Stats() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const stats = [
-    { icon: <Briefcase className="text-slate-600" size={24} />, value: 16, suffix: "+", label: "Projects Completed" },
+    { icon: <Briefcase className="text-slate-600" size={24} />, value: 17, suffix: "+", label: "Projects Completed" },
     { icon: <Clock className="text-slate-600" size={24} />, value: 2, suffix: "+", label: "Years Experience" },
     { icon: <Zap className="text-slate-600" size={24} />, value: 99, suffix: "%", label: "Client Satisfaction" },
     { icon: <Globe className="text-slate-600" size={24} />, value: 10, suffix: "+", label: "Countries Served" },
