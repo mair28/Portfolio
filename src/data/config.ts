@@ -106,6 +106,47 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: "Axiom Trade Token Monitor",
+    description: "Real-time crypto token monitoring tool for Axiom Trade platform with Discord webhook notifications and live dashboard for tracking new token launches.",
+    duration: "Nov 2025",
+    technologies: ["Python", "FastAPI", "React", "Vite", "Discord Webhooks", "REST API"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "Real-time token search with Discord notifications for new Solana token launches on Axiom Trade.",
+      code: `import requests
+import json
+from datetime import datetime
+
+API_URL = "https://api3.axiom.trade/search-v3"
+DISCORD_WEBHOOK_URL = os.getenv("DISCORD_WEBHOOK_URL")
+
+seen_tokens = set()
+
+def send_discord_notification(token):
+    embed = {
+        "title": f"New Token: {token.get('tokenName')} (${token.get('tokenTicker')})",
+        "color": 0x00ff00,
+        "fields": [
+            {"name": "Token Address", "value": f"\`{token.get('tokenAddress')}\`", "inline": False},
+            {"name": "Bonding Curve", "value": f"{token.get('bondingCurvePercent', 0)}%", "inline": True},
+            {"name": "Liquidity (SOL)", "value": f"{token.get('liquiditySol', 0):.2f}", "inline": True},
+        ],
+        "timestamp": datetime.utcnow().isoformat()
+    }
+    requests.post(DISCORD_WEBHOOK_URL, json={"embeds": [embed]})
+
+def poll_new_tokens():
+    response = requests.get(API_URL, params={"isPumpSearch": "true"})
+    tokens = response.json().get("tokens", [])
+    
+    for token in tokens:
+        if token["tokenAddress"] not in seen_tokens:
+            seen_tokens.add(token["tokenAddress"])
+            send_discord_notification(token)`,
+    },
+  },
+  {
     title: "Scraping System V3",
     description: "Advanced web scraping infrastructure with anti-detection, proxy rotation, and scalable architecture for high-volume data extraction.",
     duration: "Oct 2025 - Present",
