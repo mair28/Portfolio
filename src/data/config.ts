@@ -115,7 +115,7 @@ export const projects: Project[] = [
       language: "python",
       explanation: "Real-time token search with Discord notifications for new Solana token launches on Axiom Trade.",
       code: `import requests
-import json
+import os
 from datetime import datetime
 
 API_URL = "https://api3.axiom.trade/search-v3"
@@ -125,10 +125,10 @@ seen_tokens = set()
 
 def send_discord_notification(token):
     embed = {
-        "title": f"New Token: {token.get('tokenName')} (${token.get('tokenTicker')})",
+        "title": f"New Token: {token.get('tokenName')}",
         "color": 0x00ff00,
         "fields": [
-            {"name": "Token Address", "value": f"\`{token.get('tokenAddress')}\`", "inline": False},
+            {"name": "Ticker", "value": token.get('tokenTicker'), "inline": True},
             {"name": "Bonding Curve", "value": f"{token.get('bondingCurvePercent', 0)}%", "inline": True},
             {"name": "Liquidity (SOL)", "value": f"{token.get('liquiditySol', 0):.2f}", "inline": True},
         ],
