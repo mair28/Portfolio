@@ -26,8 +26,8 @@ const faqResponses: { keywords: string[]; response: string }[] = [
     response: "Web scraping services include:\n• E-commerce price monitoring\n• Lead generation\n• Market research data\n• Competitor analysis\n\nProjects typically start at $200-500 depending on complexity.",
   },
   {
-    keywords: ["price", "cost", "rate", "charge", "budget", "how much"],
-    response: "Pricing depends on project complexity:\n• Simple scrapers: $200-500\n• Complex systems: $500-2000+\n• Ongoing maintenance: $50-200/month\n\nWould you like to discuss your specific project?",
+    keywords: ["price", "cost", "rate", "charge", "budget", "how much", "hourly"],
+    response: "My rate is $10/hour, or we can negotiate a fixed price per project.\n\nTypical project costs:\n• Simple scrapers: $200-500\n• Complex systems: $500-2000+\n• Ongoing maintenance: $50-200/month\n\nWant to discuss your specific project? Email me at omairmalic28@gmail.com or fill the contact form!",
   },
   {
     keywords: ["available", "availability", "free", "start", "timeline", "when"],
@@ -46,8 +46,8 @@ const faqResponses: { keywords: string[]; response: string }[] = [
     response: "Automation services:\n• Telegram notification bots\n• Scheduled scraping jobs\n• Data pipeline automation\n• Social media tools\n\nTell me what you want to automate!",
   },
   {
-    keywords: ["contact", "email", "reach", "talk", "human", "person", "omair", "call"],
-    response: "I'll connect you with Omair directly. Please fill out the form below:",
+    keywords: ["contact", "email", "reach", "talk", "human", "person", "omair", "call", "speak", "chat", "real", "directly", "message"],
+    response: "You can reach Omair directly at:\n\n📧 Email: omairmalic28@gmail.com\n\nOr fill out the form below and he'll get back to you as soon as possible!",
   },
   {
     keywords: ["portfolio", "work", "example", "project", "experience"],
@@ -59,7 +59,7 @@ const faqResponses: { keywords: string[]; response: string }[] = [
   },
 ];
 
-const defaultResponse = "I'm not sure about that. You can ask about:\n• Services offered\n• Pricing\n• Availability\n• Specific technologies\n\nOr click 'Talk to Omair' to get in touch directly!";
+const defaultResponse = "I'm not sure about that. You can ask about:\n• Services offered\n• Pricing ($10/hr or per project)\n• Availability\n• Specific technologies\n\nOr contact Omair directly at omairmalic28@gmail.com!";
 
 function getResponse(input: string): { text: string; showForm: boolean } {
   const lower = input.toLowerCase();
@@ -135,7 +135,7 @@ function ContactForm({ onClose }: { onClose: () => void }) {
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: "Hi! I'm Omair's assistant. Ask me about services, pricing, or availability. Or type 'contact' to reach Omair directly!", isBot: true },
+    { id: 1, text: "Hi! I'm Omair's assistant. Ask me about services, pricing ($10/hr), or availability.\n\nNeed to talk directly? Email omairmalic28@gmail.com or type 'contact'!", isBot: true },
   ]);
   const [input, setInput] = useState("");
   const [showForm, setShowForm] = useState(false);
@@ -246,7 +246,7 @@ export default function ChatWidget() {
                 onClick={() => {
                   setMessages((prev) => [...prev, { id: Date.now(), text: "I'd like to talk to Omair", isBot: false }]);
                   setTimeout(() => {
-                    setMessages((prev) => [...prev, { id: Date.now() + 1, text: "I'll connect you with Omair directly. Please fill out the form below:", isBot: true }]);
+                    setMessages((prev) => [...prev, { id: Date.now() + 1, text: "You can reach Omair directly at:\n\n📧 Email: omairmalic28@gmail.com\n\nOr fill out the form below and he'll get back to you as soon as possible!", isBot: true }]);
                     setShowForm(true);
                   }, 500);
                 }}

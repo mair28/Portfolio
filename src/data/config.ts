@@ -661,6 +661,418 @@ export function AnimatedSection({
 }`,
     },
   },
+  {
+    title: "Request-Based Automation",
+    description: "Bulk signup automation for ticket raffles and registrations using TLS fingerprint spoofing with tls_client to bypass bot detection.",
+    duration: "Dec 2025",
+    technologies: ["Python", "tls_client", "Proxy Rotation", "Email Automation"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "TLS client session with Chrome fingerprint for bypassing bot detection on ticket registration sites.",
+      code: `import tls_client
+from typing import Optional
+
+class FusionSignup:
+    def __init__(self, proxy: Optional[dict] = None):
+        self.session = tls_client.Session(
+            client_identifier="chrome_133",
+            random_tls_extension_order=True
+        )
+        self.session.pseudo_header_order = [":method", ":authority", ":scheme", ":path"]
+        
+        if proxy:
+            self.session.proxies = proxy
+        
+        self.csrf_token: str = ""
+    
+    def _get_base_headers(self) -> dict:
+        return {
+            "sec-ch-ua": '"Chromium";v="133", "Not(A:Brand";v="99"',
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": '"Windows"',
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/133.0.0.0",
+            "sec-fetch-site": "same-origin",
+            "sec-fetch-mode": "navigate",
+        }
+    
+    def step1_get_homepage(self) -> bool:
+        """Get homepage to obtain session cookies and CSRF token."""
+        headers = self._get_base_headers()
+        resp = self.session.get(BASE_URL, headers=headers)
+        if resp.status_code == 200:
+            self.csrf_token = self._extract_csrf(resp.text)
+            return True
+        return False`,
+    },
+  },
+  {
+    title: "Auto-Strategy Production Scraper",
+    description: "Intelligent web scraping system that automatically discovers and selects the optimal scraping strategy for any website with captcha handling.",
+    duration: "Nov 2025",
+    technologies: ["Python", "Playwright", "CDP", "Strategy Pattern"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "Strategy selector that automatically tests and chooses the best scraping approach based on site defenses.",
+      code: `class StrategySelector:
+    """Selects optimal scraping strategy based on defense profiles"""
+    
+    def __init__(self, profiles_dir: str, cdp_port: int = 9222):
+        self.profile_loader = ProfileLoader(profiles_dir)
+        self.strategies = {
+            'requests': self._create_requests_strategy,
+            'cdp_fetch': self._create_cdp_fetch_strategy,
+            'cdp_navigate': self._create_cdp_navigate_strategy,
+        }
+        self.escalation_path = {
+            'requests': 'cdp_fetch',
+            'cdp_fetch': 'cdp_navigate',
+            'cdp_navigate': None
+        }
+    
+    def get_strategy_for_domain(self, domain: str):
+        """Get optimal strategy based on saved profile"""
+        profile = self.profile_loader.load_profile(domain)
+        return self.select_strategy(profile)
+    
+    def escalate_strategy(self, current: str) -> Optional[str]:
+        """Escalate to more robust strategy if current fails"""
+        next_strategy = self.escalation_path.get(current)
+        if next_strategy:
+            print(f"[ESCALATE] {current} -> {next_strategy}")
+        return next_strategy`,
+    },
+  },
+  {
+    title: "Hard-Defense Website Scraper",
+    description: "Stealth scraper for heavily protected sites like DigiKey using undetected Chrome with parallel browser instances.",
+    duration: "Nov 2024",
+    technologies: ["Python", "undetected-chromedriver", "Threading", "Stealth"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "Stealth browser class with bot detection bypass and automatic browser rotation for sustained scraping.",
+      code: `import undetected_chromedriver as uc
+import random
+
+class StealthBrowser:
+    """Manages a stealth Chrome browser instance"""
+    
+    def __init__(self, worker_id):
+        self.worker_id = worker_id
+        self.driver = None
+        self.products_processed = 0
+        
+    def start(self):
+        """Initialize undetected Chrome driver"""
+        options = uc.ChromeOptions()
+        options.add_argument('--headless=new')
+        options.add_argument('--disable-blink-features=AutomationControlled')
+        options.add_argument(f'--window-size={1920 + random.randint(-100, 100)},{1080}')
+        
+        user_agents = [
+            'Mozilla/5.0 Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 Chrome/121.0.0.0 Safari/537.36',
+        ]
+        options.add_argument(f'user-agent={random.choice(user_agents)}')
+        
+        self.driver = uc.Chrome(options=options, use_subprocess=True)
+        self.driver.set_page_load_timeout(30)
+        return True
+    
+    def should_restart(self):
+        """Restart browser every 50 products to avoid detection"""
+        return self.products_processed >= 50`,
+    },
+  },
+  {
+    title: "High-Concurrency Request Scraper",
+    description: "Template-based async scraper with curl_cffi for TLS fingerprinting, adaptive rate limiting, and automatic retry handling.",
+    duration: "Oct 2025",
+    technologies: ["Python", "curl_cffi", "asyncio", "Proxy Rotation"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "Async scraper with TLS impersonation and adaptive rate limiting for high-volume extraction.",
+      code: `from curl_cffi import requests
+import asyncio, random
+
+class AutoSiteScraper:
+    def __init__(self):
+        self.semaphore = asyncio.Semaphore(300)
+        self.error_tracker = ErrorRateTracker(window_size=100)
+        self.impersonations = ["chrome120", "chrome119", "safari17_0"]
+
+    async def fetch(self, url):
+        impersonation = random.choice(self.impersonations)
+        headers = {"User-Agent": self._get_ua(impersonation)}
+        async with requests.AsyncSession(
+            impersonate=impersonation,
+            proxies={"http": self.proxy},
+            timeout=30
+        ) as session:
+            resp = await session.get(url, headers=headers)
+            return resp.text
+
+    def rate_limit(self):
+        """Adaptive rate limiting based on error rate"""
+        error_rate = self.error_tracker.error_rate()
+        delay = 0.15 * (1 + (error_rate * 5))
+        if error_rate > 0.6:
+            time.sleep(30)  # Cooldown
+        time.sleep(delay)`,
+    },
+  },
+  {
+    title: "Contentful CMS Automation",
+    description: "Automated product data pipeline for Contentful CMS with barcode validation, image uploads, and ingredient processing.",
+    duration: "Sep 2024",
+    technologies: ["Python", "Contentful API", "Supabase", "Threading"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "Thread-safe Contentful API client with caching for high-volume product uploads.",
+      code: `import requests
+import threading
+
+BASE_URL = f"https://api.contentful.com/spaces/{SPACE_ID}/environments/{ENVIRONMENT}"
+upc_check_lock = threading.Lock()
+checked_upcs_cache = {}
+
+def is_upc_in_contentful(upc: str, ean: str = None) -> bool:
+    """Thread-safe check if UPC exists in Contentful with caching."""
+    cache_key = f"{upc}|{ean or ''}"
+    
+    with upc_check_lock:
+        if cache_key in checked_upcs_cache:
+            return checked_upcs_cache[cache_key]
+    
+    url = f"{BASE_URL}/entries"
+    params = {"query": upc, "limit": 40}
+    
+    for attempt in range(5):
+        resp = requests.get(url, headers=headers, params=params)
+        if resp.status_code == 429:
+            time.sleep(min(int(resp.headers.get('Retry-After', 60)), 30))
+            continue
+        
+        exists = resp.json().get("total", 0) > 0
+        with upc_check_lock:
+            checked_upcs_cache[cache_key] = exists
+        return exists`,
+    },
+  },
+  {
+    title: "Scraping Infrastructure V3",
+    description: "Systemd-based infrastructure for managing 30-50+ concurrent scrapers with FastAPI control system and real-time dashboard.",
+    duration: "Sep 2024",
+    technologies: ["Python", "FastAPI", "Systemd", "Redis", "Linux"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "FastAPI endpoint for managing scraper services via systemd with real-time status monitoring.",
+      code: `from fastapi import FastAPI, HTTPException
+import subprocess
+import redis
+
+app = FastAPI()
+redis_client = redis.Redis()
+
+@app.post("/scrapers/{scraper_id}/start")
+async def start_scraper(scraper_id: str):
+    """Start a scraper service via systemd"""
+    service_name = f"scraper-{scraper_id}"
+    result = subprocess.run(
+        ["systemctl", "start", service_name],
+        capture_output=True
+    )
+    if result.returncode != 0:
+        raise HTTPException(500, f"Failed to start {service_name}")
+    
+    redis_client.hset(f"scraper:{scraper_id}", "status", "running")
+    return {"status": "started", "service": service_name}
+
+@app.get("/scrapers/{scraper_id}/status")
+async def get_status(scraper_id: str):
+    """Get real-time scraper status from Redis"""
+    status = redis_client.hgetall(f"scraper:{scraper_id}")
+    return {"scraper_id": scraper_id, **status}`,
+    },
+  },
+  {
+    title: "Spekter Agency Automation",
+    description: "Game API automation tool that replicates browser requests for automated gameplay flow execution.",
+    duration: "Nov 2024",
+    technologies: ["Python", "Requests", "API Automation", "Session Management"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "API client that replicates browser session for automated game flow execution.",
+      code: `import requests
+import time
+
+class SpekterAgencyAPI:
+    def __init__(self, bearer_token: str):
+        self.base_url = "https://api.app.spekteragency.io"
+        self.session = requests.Session()
+        self.session.headers.update({
+            "Authorization": f"Bearer {bearer_token}",
+            "Content-Type": "application/json",
+            "Origin": "https://app.spekteragency.io",
+            "App-Version": "0.6.2"
+        })
+
+    def run_full_flow(self, play_id: str) -> bool:
+        """Execute complete game flow: start -> end -> claim"""
+        if not self.start_stage(play_id):
+            return False
+        time.sleep(1)
+        
+        if not self.end_stage(play_id):
+            return False
+        time.sleep(1)
+        
+        return self.claim_stage_reward(play_id)
+    
+    def start_stage(self, play_id: str):
+        resp = self.session.post(f"{self.base_url}/startStage/", json={"playId": play_id})
+        return resp.status_code == 200`,
+    },
+  },
+  {
+    title: "Auto Cursor Tool",
+    description: "Desktop application built with Tauri for managing Cursor editor machine ID backups and restoration across platforms.",
+    duration: "Nov 2024",
+    technologies: ["Rust", "Tauri", "React", "TypeScript", "SQLite"],
+    featured: false,
+    codeSnippet: {
+      language: "rust",
+      explanation: "Rust backend for cross-platform machine ID management with secure file operations.",
+      code: `use std::path::PathBuf;
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
+pub struct MachineId {
+    pub dev_device_id: String,
+    pub mac_machine_id: String,
+    pub machine_id: String,
+    pub sqm_id: String,
+}
+
+#[tauri::command]
+pub fn get_cursor_path() -> Result<PathBuf, String> {
+    #[cfg(target_os = "windows")]
+    let base = std::env::var("APPDATA").map_err(|e| e.to_string())?;
+    
+    #[cfg(target_os = "macos")]
+    let base = dirs::home_dir()
+        .ok_or("Home dir not found")?
+        .join("Library/Application Support");
+    
+    Ok(PathBuf::from(base).join("Cursor"))
+}
+
+#[tauri::command]
+pub fn restore_machine_id(backup_path: String) -> Result<(), String> {
+    let backup: MachineId = serde_json::from_str(
+        &std::fs::read_to_string(&backup_path).map_err(|e| e.to_string())?
+    ).map_err(|e| e.to_string())?;
+    
+    // Update storage.json and SQLite database
+    update_storage_json(&backup)?;
+    update_sqlite_db(&backup)?;
+    Ok(())
+}`,
+    },
+  },
+  {
+    title: "Auto Glean Dashboard",
+    description: "React dashboard for managing and monitoring web scraping operations with real-time job status and CSV uploads.",
+    duration: "Oct 2024",
+    technologies: ["React", "TypeScript", "Vite", "Tailwind CSS", "shadcn-ui"],
+    featured: false,
+    codeSnippet: {
+      language: "typescript",
+      explanation: "TypeScript API service for scraping job management with type-safe requests.",
+      code: `import { SiteJob } from '@/types';
+
+export async function uploadProductsCsv(
+  siteId: string,
+  file: File
+): Promise<{ rows: number }> {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  const response = await fetch(\`/api/sites/\${siteId}/upload\`, {
+    method: 'POST',
+    body: formData
+  });
+  return response.json();
+}
+
+export async function startScrape(siteId: string): Promise<{ jobId: string }> {
+  const response = await fetch(\`/api/sites/\${siteId}/start\`, {
+    method: 'POST'
+  });
+  return response.json();
+}
+
+export async function getJobStatus(siteId: string): Promise<Partial<SiteJob>> {
+  const response = await fetch(\`/api/sites/\${siteId}/status\`);
+  return response.json();
+}`,
+    },
+  },
+  {
+    title: "VizionCrypto System",
+    description: "Crypto inventory management system with integrated scraping pipelines for market data collection and analysis.",
+    duration: "Sep 2024",
+    technologies: ["Python", "Data Pipelines", "CSV Processing", "Automation"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "Inventory tracking system with CSV processing for crypto product management.",
+      code: `import csv
+from dataclasses import dataclass
+from typing import List, Optional
+from datetime import datetime
+
+@dataclass
+class CryptoProduct:
+    sku: str
+    name: str
+    price: float
+    quantity: int
+    last_updated: datetime
+
+class InventoryManager:
+    def __init__(self, csv_path: str):
+        self.csv_path = csv_path
+        self.products: List[CryptoProduct] = []
+        self.load_inventory()
+    
+    def load_inventory(self):
+        """Load products from CSV file"""
+        with open(self.csv_path, 'r') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                self.products.append(CryptoProduct(
+                    sku=row['sku'],
+                    name=row['name'],
+                    price=float(row['price']),
+                    quantity=int(row['quantity']),
+                    last_updated=datetime.now()
+                ))
+    
+    def update_prices(self, price_data: dict):
+        """Batch update prices from scraped data"""
+        for product in self.products:
+            if product.sku in price_data:
+                product.price = price_data[product.sku]
+                product.last_updated = datetime.now()`,
+    },
+  },
 ];
 
 export const skillCategories = {
