@@ -663,47 +663,45 @@ export function AnimatedSection({
   },
   {
     title: "Request-Based Automation",
-    description: "Bulk signup automation for ticket raffles and registrations using TLS fingerprint spoofing with tls_client to bypass bot detection.",
+    description: "Modular bulk signup and ticket automation system supporting multiple sites (Fusion Festival, Viagogo, Werder Bremen, Openstage) with TLS fingerprint spoofing, proxy rotation, and CLI interface.",
     duration: "Dec 2025",
-    technologies: ["Python", "tls_client", "Proxy Rotation", "Email Automation"],
+    technologies: ["Python", "tls_client", "Proxy Rotation", "Multi-threading", "CLI"],
     featured: true,
     codeSnippet: {
       language: "python",
-      explanation: "TLS client session with Chrome fingerprint for bypassing bot detection on ticket registration sites.",
-      code: `import tls_client
+      explanation: "Modular signup tool with proxy rotation, multi-threading, and site-specific modules for bulk automation.",
+      code: `import threading
+from concurrent.futures import ThreadPoolExecutor
 from typing import Optional
+import tls_client
 
-class FusionSignup:
-    def __init__(self, proxy: Optional[dict] = None):
+class ProxyRotator:
+    def __init__(self, proxy_file: str):
+        self.proxies = []
+        self.lock = threading.Lock()
+        with open(proxy_file, "r") as f:
+            self.proxies = [l.strip() for l in f if l.strip()]
+    
+    def get_random(self) -> Optional[dict]:
+        with self.lock:
+            proxy = random.choice(self.proxies)
+        # Format: host:port:user:pass
+        return self._format_proxy(proxy)
+
+class SignupModule:
+    def __init__(self, proxy_rotator: ProxyRotator):
+        self.proxy_rotator = proxy_rotator
         self.session = tls_client.Session(
             client_identifier="chrome_133",
             random_tls_extension_order=True
         )
-        self.session.pseudo_header_order = [":method", ":authority", ":scheme", ":path"]
-        
-        if proxy:
-            self.session.proxies = proxy
-        
-        self.csrf_token: str = ""
     
-    def _get_base_headers(self) -> dict:
-        return {
-            "sec-ch-ua": '"Chromium";v="133", "Not(A:Brand";v="99"',
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": '"Windows"',
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/133.0.0.0",
-            "sec-fetch-site": "same-origin",
-            "sec-fetch-mode": "navigate",
-        }
-    
-    def step1_get_homepage(self) -> bool:
-        """Get homepage to obtain session cookies and CSRF token."""
-        headers = self._get_base_headers()
-        resp = self.session.get(BASE_URL, headers=headers)
-        if resp.status_code == 200:
-            self.csrf_token = self._extract_csrf(resp.text)
-            return True
-        return False`,
+    def process_batch(self, entries: list, workers: int = 10):
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = [executor.submit(self.signup, e) for e in entries]
+            for future in as_completed(futures):
+                result = future.result()
+                self.stats.add_success() if result else self.stats.add_failed()`,
     },
   },
   {
