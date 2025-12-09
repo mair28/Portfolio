@@ -1073,6 +1073,53 @@ class InventoryManager:
                 product.last_updated = datetime.now()`,
     },
   },
+  {
+    title: "Multi-Retailer HTML Parser",
+    description: "Production-grade HTML parsing system for major e-commerce retailers including Apple, Nike, Sephora, IKEA, Gap, Old Navy, and Lululemon with catalog schema output.",
+    duration: "Dec 2025",
+    technologies: ["Python", "BeautifulSoup", "JSON Schema", "Data Extraction"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "Base parser class with directory traversal, progress tracking, and multi-format output for retailer product extraction.",
+      code: `from abc import ABC, abstractmethod
+from typing import List, Dict, Any
+from bs4 import BeautifulSoup
+import json, csv, os
+
+class BaseParser(ABC):
+    """Base class for all retailer parsers"""
+    
+    def __init__(self, retailer_name: str, country: str):
+        self.retailer_name = retailer_name
+        self.country = country
+        self.products = []
+    
+    @abstractmethod
+    def parse_file(self, file_path: str) -> List[Dict[str, Any]]:
+        """Parse a single file - implemented by each retailer"""
+        pass
+    
+    def parse_directory(self, directory_path: str) -> List[Dict[str, Any]]:
+        """Parse all HTML files with progress tracking"""
+        all_products = []
+        total_files = sum(1 for r, d, f in os.walk(directory_path) 
+                        for file in f if self.is_valid_file(file))
+        
+        for root, dirs, files in os.walk(directory_path):
+            for file in files:
+                if self.is_valid_file(file):
+                    products = self.parse_file(os.path.join(root, file))
+                    if products:
+                        all_products.extend(products)
+        return all_products
+    
+    def to_json(self, products: List[Dict], output_path: str):
+        """Export to Tyler's catalog schema JSON"""
+        with open(output_path, 'w') as f:
+            json.dump({"products": products}, f, indent=2)`,
+    },
+  },
 ];
 
 export const skillCategories = {
