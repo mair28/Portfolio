@@ -106,6 +106,56 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: "CSE Mock Exam",
+    description: "Interactive web application for Civil Service Exam preparation with timed mock exams, randomized question banks, and real exam simulation for both Professional (170 questions, 190 min) and Sub-Professional (165 questions, 160 min) levels.",
+    duration: "Dec 2025",
+    technologies: ["React", "Vite", "TypeScript", "Tailwind CSS", "Framer Motion"],
+    featured: true,
+    codeSnippet: {
+      language: "typescript",
+      explanation: "Exam timer hook with automatic submission and time tracking for realistic exam simulation.",
+      code: `import { useState, useEffect, useCallback } from 'react';
+
+interface UseExamTimerProps {
+  totalMinutes: number;
+  onTimeUp: () => void;
+}
+
+export function useExamTimer({ totalMinutes, onTimeUp }: UseExamTimerProps) {
+  const [timeLeft, setTimeLeft] = useState(totalMinutes * 60);
+  const [isRunning, setIsRunning] = useState(true);
+
+  useEffect(() => {
+    if (!isRunning || timeLeft <= 0) {
+      if (timeLeft <= 0) onTimeUp();
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isRunning, timeLeft, onTimeUp]);
+
+  const formatTime = useCallback(() => {
+    const hours = Math.floor(timeLeft / 3600);
+    const minutes = Math.floor((timeLeft % 3600) / 60);
+    const seconds = timeLeft % 60;
+    return \`\${hours}:\${String(minutes).padStart(2, '0')}:\${String(seconds).padStart(2, '0')}\`;
+  }, [timeLeft]);
+
+  return { timeLeft, formatTime, isRunning, setIsRunning };
+}`,
+    },
+  },
+  {
     title: "Axiom Trade Token Monitor",
     description: "Real-time crypto token monitoring tool for Axiom Trade platform with Discord webhook notifications and live dashboard for tracking new token launches.",
     duration: "Nov 2025",
