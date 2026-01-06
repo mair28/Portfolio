@@ -64,7 +64,7 @@ export const skills: Skill[] = [
   { name: "Django", level: "intermediate", category: "backend" },
   { name: "Flask", level: "intermediate", category: "backend" },
   { name: "REST APIs", level: "advanced", category: "backend" },
-  
+
   // Frontend (Learning/Building)
   { name: "HTML & CSS", level: "intermediate", category: "frontend" },
   { name: "JavaScript", level: "intermediate", category: "frontend" },
@@ -72,13 +72,13 @@ export const skills: Skill[] = [
   { name: "React", level: "beginner", category: "frontend" },
   { name: "Next.js", level: "beginner", category: "frontend" },
   { name: "Tailwind CSS", level: "beginner", category: "frontend" },
-  
+
   // Databases
   { name: "PostgreSQL", level: "intermediate", category: "databases" },
   { name: "MongoDB", level: "intermediate", category: "databases" },
   { name: "SQLite", level: "advanced", category: "databases" },
   { name: "Redis", level: "beginner", category: "databases" },
-  
+
   // Tools & DevOps
   { name: "Git & GitHub", level: "advanced", category: "tools" },
   { name: "Docker", level: "intermediate", category: "tools" },
@@ -1166,6 +1166,253 @@ class BaseParser(ABC):
         """Export to Tyler's catalog schema JSON"""
         with open(output_path, 'w') as f:
             json.dump({"products": products}, f, indent=2)`,
+    },
+  },
+  {
+    title: "GMX Email Alias Automation",
+    description: "Playwright-based automation for GMX email alias management including login, password reset, filter rules, and alias creation with session recovery.",
+    duration: "Dec 2025 - Jan 2026",
+    technologies: ["Python", "Playwright", "IMAP", "Session Management"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "Session-aware GMX automation with Playwright for email alias and filter management.",
+      code: `from playwright.sync_api import sync_playwright
+import imaplib
+
+class GMXAutomation:
+    def __init__(self, email: str, password: str):
+        self.email = email
+        self.password = password
+        self.browser = None
+        self.page = None
+    
+    def login(self):
+        """Login to GMX with session recovery handling."""
+        self.page.goto("https://www.gmx.com/")
+        self.page.fill('input[name="username"]', self.email)
+        self.page.fill('input[name="password"]', self.password)
+        self.page.click('button[type="submit"]')
+        
+        # Handle session restoration dialog
+        if self.page.locator("text=session is being restored").is_visible():
+            self.page.click("text=Continue")
+    
+    def create_alias(self, alias_name: str) -> bool:
+        """Create new email alias in GMX settings."""
+        self.page.goto("https://navigator.gmx.com/alias-settings")
+        self.page.fill('input[name="alias"]', alias_name)
+        self.page.click('button:has-text("Create")')
+        return self.page.locator("text=successfully created").is_visible()`,
+    },
+  },
+  {
+    title: "Crossfire Legends Registration",
+    description: "Full-stack game account registration service with FastAPI backend, React dashboard, 16-worker parallel execution, IMAP verification, and Discord notifications.",
+    duration: "Dec 2025 - Jan 2026",
+    technologies: ["Python", "FastAPI", "React", "Playwright", "IMAP", "Discord Webhooks"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "Multi-worker job manager with VPS deployment support and Discord notifications for bulk account registration.",
+      code: `from fastapi import FastAPI
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+
+class JobManager:
+    TOTAL_WORKERS = 16
+    
+    def __init__(self):
+        self.jobs = {}
+        self.worker_pool = ThreadPoolExecutor(max_workers=16)
+        self.is_running = False
+    
+    async def start_job(self, job_id: str, target: int, use_proxy: bool):
+        """Start a registration job with parallel workers."""
+        job = self.jobs[job_id]
+        job["status"] = "running"
+        job["started_at"] = datetime.now().isoformat()
+        
+        # Distribute work across workers
+        workers_per_batch = min(16, target)
+        for worker_id in range(workers_per_batch):
+            self.worker_pool.submit(
+                self._run_worker, job_id, worker_id, use_proxy
+            )
+    
+    async def send_discord_notification(self, job_id: str, progress: int):
+        """Notify Discord on job completion."""
+        embed = {
+            "title": f"Job Completed: {job_id}",
+            "color": 0x00ff00,
+            "fields": [{"name": "Progress", "value": f"{progress}/{self.jobs[job_id]['target']}"}]
+        }
+        requests.post(DISCORD_WEBHOOK_URL, json={"embeds": [embed]})`,
+    },
+  },
+  {
+    title: "FIFA Browser Automation",
+    description: "Camoufox-based browser automation for FIFA random selection draw submission with anti-detection, proxy rotation, and email verification handling.",
+    duration: "Jan 2026",
+    technologies: ["Python", "Camoufox", "PyAutoGUI", "Proxy Rotation", "IMAP"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "Stealth browser automation using Camoufox for FIFA form submission with captcha handling.",
+      code: `from camoufox.sync_api import Camoufox
+import pyautogui
+
+class FIFAAutomation:
+    def __init__(self, proxy: str = None):
+        self.proxy = proxy
+        self.browser = None
+    
+    def start_browser(self):
+        """Initialize Camoufox with anti-detection features."""
+        self.browser = Camoufox(
+            headless=False,
+            proxy={"server": self.proxy} if self.proxy else None,
+            humanize=True  # Human-like mouse movements
+        )
+        return self.browser.new_context()
+    
+    def fill_registration_form(self, page, data: dict):
+        """Fill FIFA registration form with human-like behavior."""
+        # Human-like typing with delays
+        for field, value in data.items():
+            element = page.locator(f'input[name="{field}"]')
+            element.click()
+            for char in value:
+                element.type(char, delay=random.randint(50, 150))
+        
+        # Handle captcha if present
+        if page.locator(".captcha-container").is_visible():
+            self.solve_captcha(page)`,
+    },
+  },
+  {
+    title: "CapCut Signup Automation",
+    description: "Automated CapCut account creation using Chrome CDP with proxy rotation, React form handling, and IMAP email verification.",
+    duration: "Dec 2025",
+    technologies: ["Python", "Chrome CDP", "Proxy Rotation", "IMAP", "Asyncio"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "CDP-based signup automation with React input handling for CapCut accounts.",
+      code: `import asyncio
+from browser_utils import BrowserManager, generate_email_alias
+
+class CapCutSignup:
+    def __init__(self):
+        self.proxy_manager = ProxyManager()
+        self.email_handler = EmailHandler()
+        self.success_count = 0
+    
+    async def set_react_input(self, browser, selector: str, value: str):
+        """Set input value using React-compatible approach."""
+        await browser.evaluate(f'''
+            const input = document.querySelector("{selector}");
+            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                window.HTMLInputElement.prototype, "value"
+            ).set;
+            nativeInputValueSetter.call(input, "{value}");
+            input.dispatchEvent(new Event("input", {{ bubbles: true }}));
+        ''')
+    
+    async def perform_signup(self, email: str, proxy: str):
+        """Perform a single signup attempt with email verification."""
+        async with BrowserManager(proxy=proxy) as browser:
+            await browser.goto("https://www.capcut.com/signup")
+            await self.set_react_input(browser, 'input[name="email"]', email)
+            await browser.click('button[type="submit"]')
+            
+            # Wait for and verify email code
+            code = await self.email_handler.get_verification_code(email)
+            await self.set_react_input(browser, 'input[name="code"]', code)`,
+    },
+  },
+  {
+    title: "Telegram Group Scraper",
+    description: "Electron desktop app with Python backend for scraping Telegram group members with account rotation, session management, and CSV export.",
+    duration: "Jan 2026",
+    technologies: ["Python", "Electron", "Telethon", "React", "TypeScript"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "Telethon-based Telegram scraper with account rotation for large group extraction.",
+      code: `from telethon import TelegramClient
+from telethon.tl.functions.channels import GetParticipantsRequest
+import csv
+
+class TelegramScraper:
+    def __init__(self, sessions: list):
+        self.sessions = sessions
+        self.current_session_idx = 0
+    
+    def get_client(self) -> TelegramClient:
+        """Rotate through available sessions to avoid rate limits."""
+        session = self.sessions[self.current_session_idx]
+        self.current_session_idx = (self.current_session_idx + 1) % len(self.sessions)
+        return TelegramClient(session['session_file'], session['api_id'], session['api_hash'])
+    
+    async def scrape_group(self, group_link: str, limit: int = 1000) -> list:
+        """Scrape members from a Telegram group."""
+        client = self.get_client()
+        await client.start()
+        
+        group = await client.get_entity(group_link)
+        participants = await client(GetParticipantsRequest(
+            group, filter=ChannelParticipantsSearch(''),
+            offset=0, limit=limit, hash=0
+        ))
+        
+        return [{
+            'user_id': p.id,
+            'username': p.username,
+            'first_name': p.first_name
+        } for p in participants.users]`,
+    },
+  },
+  {
+    title: "HealthGigHub Job Scraper",
+    description: "Automated RN job scraper for Remote Nurse Connection and NurseFern with Cloudflare bypass, daily scheduling, and WordPress-ready CSV export.",
+    duration: "Jan 2026",
+    technologies: ["Python", "cloudscraper", "Requests", "CSV", "Scheduling"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "Multi-source job scraper with Cloudflare bypass and standardized output for healthcare jobs.",
+      code: `import cloudscraper
+import csv
+from datetime import datetime
+
+class HealthJobScraper:
+    def __init__(self, proxy_url: str = None):
+        self.scraper = cloudscraper.create_scraper()
+        if proxy_url:
+            self.scraper.proxies = {"http": proxy_url, "https": proxy_url}
+    
+    def scrape_remote_nurse_connection(self) -> list:
+        """Scrape jobs from Remote Nurse Connection with Cloudflare bypass."""
+        jobs = []
+        response = self.scraper.get("https://remotenurseconnection.com/jobs")
+        
+        for job_element in parse_job_listings(response.text):
+            jobs.append({
+                'job_title': job_element.title,
+                'company': job_element.company,
+                'location': job_element.location,
+                'salary_range': job_element.salary,
+                'apply_link': job_element.url,
+                'source_site': 'remotenurseconnection.com'
+            })
+        return jobs
+    
+    def scrape_nursefern_api(self) -> list:
+        """Direct API access to NurseFern job listings."""
+        response = self.scraper.get("https://app.nursefern.com/api/1.1/obj/job")
+        return [self._format_job(j) for j in response.json()['response']['results']
+                if not j.get('archived')]`,
     },
   },
 ];
