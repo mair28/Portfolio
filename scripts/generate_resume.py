@@ -274,25 +274,41 @@ c.line(mx, y, mx + 115, y)
 projects = [
     {
         "name": "Viagogo Crawler System",
-        "date": "Jan 2026 - Feb 2026",
-        "desc": "High-fidelity ticket listing crawler with AWS WAF bypass, location-based pricing, REST API. PostgreSQL + Docker deployment."
+        "date": "Jan - Feb 2026",
+        "desc": "AWS WAF bypass, location-based pricing, PostgreSQL + Docker deployment."
     },
     {
         "name": "Ticketmaster Automation Suite",
         "date": "Jan 2026",
-        "desc": "Human-simulated account farming with stealth bypass for 'Browsing Activity Paused' blocks, proxy rotation, regional discovery."
+        "desc": "Human-simulated farming with stealth bypass, proxy rotation."
     },
     {
         "name": "SheerID Verification & DocGen",
         "date": "Jan 2026",
-        "desc": "AI-evasion tool for SheerID verification. Custom document generator with noise injection, perspective distortion, JPEG artifacts."
+        "desc": "AI-evasion tool with noise injection, perspective distortion."
     },
     {
-        "name": "Enterprise Scraping System V3",
+        "name": "Crossfire Legends Registration",
+        "date": "Jan 2026",
+        "desc": "16-worker CAPTCHA solving, IMAP verification, React dashboard."
+    },
+    {
+        "name": "Multi-Retailer HTML Parser",
         "date": "Oct 2025 - Present",
-        "desc": "Large-scale infrastructure handling 500K+ daily extractions across 100+ e-commerce sites with automatic failover."
+        "desc": "20+ retailers (Apple, Nike, Sephora, IKEA) with US/CA support."
+    },
+    {
+        "name": "FIFA Random Selection Automation",
+        "date": "Dec 2025",
+        "desc": "Camoufox stealth automation with fingerprint randomization."
+    },
+    {
+        "name": "Request-Based Signup Tool",
+        "date": "Dec 2025",
+        "desc": "LA28/Tomorrowland signups via curl_cffi TLS fingerprinting."
     },
 ]
+
 
 
 y -= 16
