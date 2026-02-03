@@ -273,26 +273,27 @@ c.line(mx, y, mx + 115, y)
 
 projects = [
     {
+        "name": "Viagogo Crawler System",
+        "date": "Jan 2026 - Feb 2026",
+        "desc": "High-fidelity ticket listing crawler with AWS WAF bypass, location-based pricing, REST API. PostgreSQL + Docker deployment."
+    },
+    {
+        "name": "Ticketmaster Automation Suite",
+        "date": "Jan 2026",
+        "desc": "Human-simulated account farming with stealth bypass for 'Browsing Activity Paused' blocks, proxy rotation, regional discovery."
+    },
+    {
+        "name": "SheerID Verification & DocGen",
+        "date": "Jan 2026",
+        "desc": "AI-evasion tool for SheerID verification. Custom document generator with noise injection, perspective distortion, JPEG artifacts."
+    },
+    {
         "name": "Enterprise Scraping System V3",
         "date": "Oct 2025 - Present",
-        "desc": "Large-scale infrastructure handling 500K+ daily extractions across 100+ e-commerce sites with automatic failover and retry logic."
-    },
-    {
-        "name": "E-commerce Price Intelligence",
-        "date": "Aug 2025 - Present",
-        "desc": "Real-time competitor price monitoring with instant alerts, historical tracking, and trend analysis dashboard."
-    },
-    {
-        "name": "Amazon Analytics Platform",
-        "date": "Mar 2024 - Jul 2025",
-        "desc": "Keepa API integration processing 10K+ ASINs daily for price history, sales rank tracking, and buy recommendations."
-    },
-    {
-        "name": "Stealth Browser Framework",
-        "date": "Mar 2024 - Aug 2024",
-        "desc": "CDP-based automation with fingerprint randomization, successfully bypassing major protection services."
+        "desc": "Large-scale infrastructure handling 500K+ daily extractions across 100+ e-commerce sites with automatic failover."
     },
 ]
+
 
 y -= 16
 for proj in projects:
