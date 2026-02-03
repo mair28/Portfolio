@@ -7,9 +7,9 @@ export const siteConfig = {
   about: {
     headline: "From Web Scraping to Full-Stack Development",
     paragraphs: [
-      "I'm Omair Malic, a freelance Python developer based in the Philippines with deep expertise in web scraping, data extraction, and automation. I've built robust scraping solutions that handle complex websites, anti-bot measures, and large-scale data pipelines.",
-      "Now I'm expanding into full-stack web development, creating end-to-end solutions — from backend APIs to beautiful, responsive frontends. My goal is to combine my data engineering background with modern web technologies.",
-      "I believe in clean code, continuous learning, and building products that make a difference. Let's create something amazing together.",
+      "I'm Omair Malic, a freelance Python developer based in the Philippines with deep expertise in web scraping, data extraction, and automation. I specialize in building robust solutions that bypass advanced anti-bot measures (AWS WAF, Akamai, Cloudflare) and solve complex verification challenges.",
+      "Recently, I've developed sophisticated crawler systems for Viagogo and Ticketmaster, as well as AI-evasion tools for SheerID verification. My work combines high-fidelity browser automation with scalable backend architectures.",
+      "I believe in clean code, continuous learning, and building premium tools that solve real-world automation problems. Let's create something amazing together.",
     ],
   },
 };
@@ -105,6 +105,100 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    title: "Viagogo Crawler System",
+    description: "High-fidelity ticket listing crawler with AWS WAF bypass, location-based pricing context, and REST API. Features include real-time sales tracking, sitemap discovery, and high-fidelity session state management. Integrated with PostgreSQL and Docker for scalable deployment.",
+    duration: "Jan 2026 - Feb 2026",
+    technologies: ["Python", "AWS WAF", "FastAPI", "Postgres", "Docker", "curl_cffi"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "Viagogo API Client with AWS WAF token handling and Chrome TLS fingerprint impersonation for anti-detection.",
+      code: `class ViagogoClient:
+    """Viagogo API Client with AWS WAF support and Anti-Detection"""
+    
+    WAF_ENDPOINT = "b2037b2ab8ee.edge.sdk.awswaf.com/b2037b2ab8ee/db6f5e3d1a86"
+    DOMAIN = "www.viagogo.com"
+    
+    def __init__(self, proxy: str = None, use_proxy: bool = True):
+        # Create session with anti-detection (curl_cffi for TLS spoofing)
+        self.session, _, self.impersonate_version = create_session(
+            proxy=proxy_url, 
+            impersonate="chrome_124"
+        )
+        self.user_agent = get_random_user_agent()
+        
+    def solve_waf(self, max_retries: int = 3) -> str:
+        """Solve AWS WAF challenge and obtain token for session enrichment"""
+        solver = AwsWafSolver(
+            endpoint=self.WAF_ENDPOINT,
+            domain=self.DOMAIN,
+            user_agent=self.user_agent
+        )
+        token = solver.get_token()
+        if token:
+            self.session.cookies.set("aws-waf-token", token, domain=".viagogo.com")
+            return token`,
+    },
+  },
+  {
+    title: "Ticketmaster Automation Suite",
+    description: "Advanced automation suite for Ticketmaster featuring a price checker and account 'farmer' with human-simulated behavior. Includes stealth bypass for 'Browsing Activity Paused' blocks, proxy rotation with LocalProxyServer, and automated regional event discovery.",
+    duration: "Jan 2026",
+    technologies: ["Python", "Selenium", "Stealth Techniques", "Human Simulation", "Bot Detection"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "Human-simulated interaction logic with region-specific navigation and advanced block detection.",
+      code: `async def check_for_blocks(page):
+    """Detect specific 'Browsing Activity Paused' block variant from Ticketmaster"""
+    paused_text = await page.evaluate("""
+        (() => {
+            const el = document.querySelector('#t1');
+            return el ? el.innerText.trim() : '';
+        })()
+    """)
+    if "browsing activity has been paused" in paused_text.lower():
+        return True, "browsing_paused"
+    return False, ""
+
+async def dismiss_cookie_banner(page):
+    """Robust cookie consent dismissal to ensure interactability"""
+    for selector in SELECTORS["cookie_banner"]:
+        btn = await page.select(selector, timeout=2)
+        if btn:
+            await btn.click()
+            return True`,
+    },
+  },
+  {
+    title: "SheerID Verification & DocGen",
+    description: "High-success rate automation for SheerID verification workflows (Spotify, YouTube, Gemini). Features a custom document generator that injects noise, perspective distortion, JPEG artifacts, and paper textures to bypass AI-based fraud detection systems.",
+    duration: "Jan 2026",
+    technologies: ["Python", "Pillow", "curl_cffi", "TLS Fingerprinting", "AI Evasion"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "Advanced anti-detection document processing: applying rotation, perspective distortion, and JPEG artifacts to mimic real scans.",
+      code: `def apply_all_anti_detection(img: Image.Image, aggressive: bool = False) -> Image.Image:
+    """Apply sequences of effects to bypass AI document analysis"""
+    # 1. Add paper grain and cream tint
+    img = apply_paper_texture(img)
+    
+    # 2. Break perfect alignment with rotation/skew
+    img = apply_rotation_skew(img, max_angle=1.2)
+    
+    # 3. Simulate photo perspective (non-flat)
+    if random.random() < 0.5:
+        img = apply_perspective_distortion(img, intensity=0.01)
+    
+    # 4. Inject JPEG compression artifacts to look like a real photograph
+    quality = random.randint(78, 88)
+    img = apply_jpeg_artifacts(img, quality=quality)
+    
+    return img`,
+    },
+  },
   {
     title: "CSE Mock Exam",
     description: "Interactive web application for Civil Service Exam preparation with timed mock exams, randomized question banks, and real exam simulation for both Professional (170 questions, 190 min) and Sub-Professional (165 questions, 160 min) levels.",

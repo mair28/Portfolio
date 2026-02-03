@@ -160,6 +160,32 @@ for line in simpleSplit(summary, "Helvetica", 9, mw):
     c.drawString(mx, y, line)
     y -= 13
 
+# Education Section (Harvard-style)
+y -= 18
+c.setFillColor(slate800)
+c.setFont("Helvetica-Bold", 12)
+c.drawString(mx, y, "EDUCATION")
+y -= 6
+c.setStrokeColor(accent)
+c.setLineWidth(2)
+c.line(mx, y, mx + 70, y)
+
+y -= 18
+c.setFont("Helvetica-Bold", 10)
+c.setFillColor(slate800)
+c.drawString(mx, y, "Bachelor of Science in Information Technology")
+c.setFont("Helvetica", 8)
+c.setFillColor(accent)
+c.drawRightString(width - 22, y, "2023 – 2024")
+
+y -= 14
+c.setFillColor(slate600)
+c.setFont("Helvetica", 9)
+c.drawString(mx, y, "ICCT Colleges Main Campus")
+c.setFont("Helvetica-Oblique", 8)
+c.setFillColor(slate400)
+c.drawString(mx + c.stringWidth("ICCT Colleges Main Campus", "Helvetica", 9) + 8, y, "Cainta, Rizal, Philippines")
+
 # What I Deliver Section
 y -= 18
 c.setFillColor(slate800)
