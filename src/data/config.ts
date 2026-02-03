@@ -200,6 +200,112 @@ async def dismiss_cookie_banner(page):
     },
   },
   {
+    title: "Crossfire Legends Registration System",
+    description: "Multi-worker registration automation for gaming platform. Features 16 parallel workers, CAPTCHA solving integration, IMAP email verification, GCash payment integration, and a React-based dashboard for monitoring registration progress.",
+    duration: "Jan 2026",
+    technologies: ["Python", "Playwright", "CAPTCHA Solving", "IMAP", "React", "Multi-threading"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "Registration worker with CAPTCHA solving and email verification for gaming accounts.",
+      code: `class RegistrationWorker:
+    """Multi-threaded registration worker with CAPTCHA solving"""
+    
+    def __init__(self, worker_id: int, proxy: str, email_manager: IMAPManager):
+        self.worker_id = worker_id
+        self.proxy = proxy
+        self.email_manager = email_manager
+        self.captcha_solver = CaptchaSolver(api_key=CAPMONSTER_KEY)
+        
+    async def register_account(self, username: str, password: str) -> bool:
+        """Complete registration flow with CAPTCHA and email verification"""
+        captcha_token = await self.captcha_solver.solve_slide_captcha(
+            page_url=REGISTER_URL,
+            captcha_element="#captcha-container"
+        )
+        await self.submit_form(username, password, captcha_token)
+        verification_code = await self.email_manager.wait_for_code(
+            timeout=60, sender="noreply@playcfl.com"
+        )
+        return await self.verify_email(verification_code)`,
+    },
+  },
+  {
+    title: "Multi-Retailer HTML Parser",
+    description: "Production-grade parsing system for 20+ major retailers including Apple, Nike, Sephora, IKEA, Lululemon, Gap, Old Navy, Best Buy, and Costco. Extracts product data, pricing, and inventory with region-specific handling (US/CA).",
+    duration: "Oct 2025 - Present",
+    technologies: ["Python", "BeautifulSoup", "FastAPI", "JSON Schema", "Multi-region"],
+    featured: true,
+    codeSnippet: {
+      language: "python",
+      explanation: "Registry pattern for dynamic parser loading across retailers.",
+      code: `from parsers.registry import ParserRegistry
+
+registry = ParserRegistry()
+registry.load_all()
+
+def parse_product(url: str, html: str) -> dict:
+    """Route URL to correct retailer parser and extract data"""
+    retailer = registry.identify_retailer(url)
+    parser = registry.get_parser(retailer)
+    return {
+        "retailer": retailer,
+        "region": parser.detect_region(url),
+        "product": parser.parse_product(html),
+        "pricing": parser.parse_pricing(html),
+        "inventory": parser.parse_inventory(html),
+    }`,
+    },
+  },
+  {
+    title: "Request-Based Signup Automation",
+    description: "Pure HTTP-based registration system for high-value event signups (LA28 Olympics, Tomorrowland). Bypasses AWS WAF and Cognito authentication using curl_cffi TLS fingerprinting, achieving 70%+ success rate without browser automation.",
+    duration: "Dec 2025 - Jan 2026",
+    technologies: ["Python", "curl_cffi", "AWS WAF", "Cognito", "OAuth"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "AWS WAF token solver for pure HTTP-based registration bypass.",
+      code: `class AwsWafSolver:
+    """Solve AWS WAF challenges without browser"""
+    
+    def __init__(self, endpoint: str, domain: str, user_agent: str):
+        self.endpoint = endpoint
+        self.domain = domain
+        self.session = create_session(impersonate="chrome_124")
+        
+    def get_token(self) -> str:
+        """Fetch WAF token via challenge endpoint"""
+        response = self.session.post(
+            f"https://{self.endpoint}/challenge",
+            headers={"Origin": f"https://{self.domain}"},
+            json={"action": "getToken"}
+        )
+        return response.json().get("token")`,
+    },
+  },
+  {
+    title: "FIFA Random Selection Automation",
+    description: "Stealth automation for FIFA ticket draw registration using Camoufox (Firefox-based anti-detection). Features human-like form filling, advanced fingerprint randomization, and automated entry submission with proxy rotation.",
+    duration: "Dec 2025",
+    technologies: ["Python", "Camoufox", "Anti-Detection", "Fingerprinting", "PyAutoGUI"],
+    featured: false,
+    codeSnippet: {
+      language: "python",
+      explanation: "Camoufox-based stealth automation with human behavior simulation.",
+      code: `async def fill_form_human_like(page, form_data: dict):
+    """Fill registration form with human-like delays"""
+    for field, value in form_data.items():
+        element = await page.wait_for_selector(f"[name='{field}']")
+        await asyncio.sleep(random.uniform(0.3, 0.8))
+        await element.click()
+        for char in value:
+            await element.type(char, delay=random.randint(50, 150))
+        await asyncio.sleep(random.uniform(0.2, 0.5))`,
+    },
+  },
+  {
+
     title: "CSE Mock Exam",
     description: "Interactive web application for Civil Service Exam preparation with timed mock exams, randomized question banks, and real exam simulation for both Professional (170 questions, 190 min) and Sub-Professional (165 questions, 160 min) levels.",
     duration: "Dec 2025",
